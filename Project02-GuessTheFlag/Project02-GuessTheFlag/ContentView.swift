@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+extension View {
+    func styleFlags() -> some View {
+        modifier(FlagMod())
+    }
+    
+    func styleSubtitle() -> some View {
+        modifier(SubtitleMod())
+    }
+    
+    func styleTitle() -> some View {
+        modifier(TitleMod())
+    }
+}
+
 struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -27,12 +41,11 @@ struct ContentView: View {
                 VStack(spacing: 20) {
                     VStack {
                         Text("Tap the flag of")
-                            .font(.title3)
-                            .foregroundColor(.white)
+                            .styleSubtitle()
                         Text(countries[correctAnswer])
-                            .foregroundColor(.white)
-                            .font(.largeTitle.weight(.black))
+                            .styleTitle()
                     }
+                    .modifier(TitleMod())
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
@@ -40,9 +53,7 @@ struct ContentView: View {
                             Image(countries[number])
                                 .renderingMode(.original)
                         }
-                        .cornerRadius(10)
-                        .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.8), radius: 6, x: -3, y: -3)
-                        .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.4), radius: 6, x: 3, y: 3)
+                        .styleFlags()
                     }
                 }
                 .padding(20)
@@ -72,6 +83,7 @@ struct ContentView: View {
         }
     }
     
+    //MARK: Flag Button Logic
     func flagTapped(_ number: Int) {
         gameCounter += 1
         if gameCounter == 10 {
@@ -93,6 +105,32 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+}
+
+//MARK: Modifiers for styling
+struct SubtitleMod: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.title3)
+            .foregroundColor(.white)
+    }
+}
+
+struct TitleMod: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.white)
+            .font(.largeTitle.weight(.black))
+    }
+}
+
+struct FlagMod: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .cornerRadius(10)
+            .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.8), radius: 6, x: -3, y: -3)
+            .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.4), radius: 6, x: 3, y: 3)
     }
 }
 

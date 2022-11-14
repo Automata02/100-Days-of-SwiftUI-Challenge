@@ -47,6 +47,7 @@ struct ContentView: View {
                             Text($0, format: .percent)
                         }
                     }
+                    .foregroundColor(tipPercent == 0 ? .red : .green)
                     .pickerStyle(.navigationLink)
                     .focused($percentIsFocused)
                 } header: {
