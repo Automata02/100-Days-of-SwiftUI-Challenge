@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//MARK: View styling extension w/ modifiers
 extension View {
     func styleFlags() -> some View {
         modifier(FlagMod())
@@ -29,6 +30,12 @@ struct ContentView: View {
     @State private var gameCounter = 0
     @State private var gameOver = false
     
+    @State private var flagRotationDegrees = 0.0
+    @State private var selectedFlag: Int = 0
+    @State private var isCorrectFlag = false
+    @State private var isTranslucent = false
+    @State private var isBlended = false
+    
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
     
@@ -46,14 +53,26 @@ struct ContentView: View {
                             .styleTitle()
                     }
                     .modifier(TitleMod())
-                    ForEach(0..<3) { number in
-                        Button {
-                            flagTapped(number)
-                        } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
+                    VStack {
+                        ForEach(0..<3) { number in
+                            Button {
+                                flagTapped(number)
+                                selectedFlag = number
+                                withAnimation{
+                                    flagRotationDegrees = 360
+                                    isTranslucent.toggle()
+                                    isBlended.toggle()
+                                }
+                            } label: {
+                                Image(countries[number])
+                                    .renderingMode(.original)
+                            }
+                            .styleFlags()
+                            .opacity(isTranslucent && selectedFlag != number ? 0.25 : 1)
+                            .scaleEffect(isTranslucent && selectedFlag != number ? 0.95 : 1)
+                            .rotation3DEffect(.degrees(selectedFlag == number && isCorrectFlag ? flagRotationDegrees : 0), axis: (x: 0, y: 1, z: 0))
+                            .blendMode(isBlended && !isCorrectFlag ? .luminosity : .normal)
                         }
-                        .styleFlags()
                     }
                 }
                 .padding(20)
@@ -64,10 +83,14 @@ struct ContentView: View {
                     .font(.headline.bold())
                 Spacer()
             }
-            .padding(20)
-            
             .alert(scoreTitle, isPresented: $showingScore) {
-                Button("Continue", action: askQuestion)
+                Button("Continue") {
+                    askQuestion()
+                    flagRotationDegrees = 0.0
+                    isCorrectFlag = false
+                    isTranslucent.toggle()
+                    isBlended.toggle()
+                }
             } message: {
                 Text(scoreMessage)
             }
@@ -86,20 +109,35 @@ struct ContentView: View {
     //MARK: Flag Button Logic
     func flagTapped(_ number: Int) {
         gameCounter += 1
+        
         if gameCounter == 10 {
             gameOver = true
         }
         
         if number == correctAnswer {
+            isCorrectFlag.toggle()
             score += 1
             scoreTitle = "Correct!"
-            scoreMessage = "Your score is \(score)."
+            scoreMessage = " That is the \(countries[correctAnswer]) flag. Your score is \(score)."
         } else {
             score += 1
             scoreTitle = "Wrong!"
-            scoreMessage = "Correct answer was \(correctAnswer)."
+            
+            switch correctAnswer {
+            case 0:
+                scoreMessage = "Sorry, it was the \(correctAnswer + 1)st flag."
+            case 1:
+                scoreMessage = "Sorry, it was the \(correctAnswer + 1)nd flag."
+            case 2:
+                scoreMessage = "Sorry, it was the \(correctAnswer + 1)rd flag."
+            default:
+                scoreMessage = "Something went wrong."
+            }
         }
-        showingScore = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            showingScore = true
+        }
     }
     
     func askQuestion() {
@@ -129,6 +167,7 @@ struct FlagMod: ViewModifier {
     func body(content: Content) -> some View {
         content
             .cornerRadius(10)
+            .padding(15)
             .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.8), radius: 6, x: -3, y: -3)
             .shadow(color: Color(hue: 0, saturation: 0, brightness: 0.4), radius: 6, x: 3, y: 3)
     }
