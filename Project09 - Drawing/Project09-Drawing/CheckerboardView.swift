@@ -1,0 +1,65 @@
+//
+//  CheckerboardView.swift
+//  Project09-Drawing
+//
+//  Created by roberts.kursitis on 23/11/2022.
+//
+
+import SwiftUI
+
+struct Checkerboard: Shape {
+    var rows: Int
+    var columns: Int
+    
+    var animatableData: AnimatablePair<Double, Double> {
+        get {
+            AnimatablePair(Double(rows), Double(columns))
+        }
+        set {
+            rows = Int(newValue.first)
+            columns = Int(newValue.second)
+        }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let rowSize = rect.height / Double(rows)
+        let columnSize = rect.width / Double(columns)
+        
+        for row in 0..<rows {
+            for column in 0..<columns {
+                if (row + column).isMultiple(of: 2) {
+                    let startX = columnSize * Double(column)
+                    let startY = rowSize * Double(row)
+                    
+                    let rect = CGRect(x: startX, y: startY, width: columnSize, height: rowSize)
+                    path.addRect(rect)
+                }
+            }
+        }
+        
+        return path
+    }
+}
+
+struct CheckerboardView: View {
+    @State private var rows = 4
+    @State private var colums = 4
+    
+    var body: some View {
+        Checkerboard(rows: rows, columns: colums)
+            .onTapGesture {
+                withAnimation(.linear(duration: 3)) {
+                    rows = 8
+                    colums = 16
+                }
+            }
+    }
+}
+
+struct CheckerboardView_Previews: PreviewProvider {
+    static var previews: some View {
+        CheckerboardView()
+    }
+}
