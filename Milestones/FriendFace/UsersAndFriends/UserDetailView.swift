@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserDetailView: View {
     let user: User
+    let cachedUser: CachedUser?
     
     var body: some View {
         NavigationView {
@@ -28,13 +29,13 @@ struct UserDetailView: View {
                 } header: {
                     Label("e-mail", systemImage: "envelope.circle.fill")
                 }
-                
+
                 Section {
                     Text(user.address)
                 } header: {
                     Label("Address", systemImage: "mappin.circle.fill")
                 }
-                
+
                 Section {
                     Text(user.registered.formatted(date: .long, time: .omitted))
                 } header: {
@@ -42,14 +43,13 @@ struct UserDetailView: View {
                 }
             }
             .navigationTitle(user.name)
-//            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 struct UserDetailView_Previews: PreviewProvider {
     static var previews: some View {
-
-        UserDetailView(user: User.bob)
+        UserDetailView(user: Constants.bob, cachedUser: nil)
     }
 }
