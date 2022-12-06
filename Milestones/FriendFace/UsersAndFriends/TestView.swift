@@ -17,7 +17,7 @@ struct TestView: View {
                 List {
                     ForEach(users, id: \.self) { user in
                         NavigationLink {
-//                            UserDetailView(user: user)
+                            UserDetailView(user: Constants.bob, cachedUser: user)
                         } label: {
                             VStack(alignment: .leading) {
                                 Text(user.name ?? "")
