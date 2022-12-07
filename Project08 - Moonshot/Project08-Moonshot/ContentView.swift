@@ -50,6 +50,9 @@ struct ContentView: View {
                                     .overlay(RoundedRectangle(cornerRadius: 10)
                                         .stroke(.lightBackground)
                                     )
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel(mission.displayName)
+                                    .accessibilityHint(mission.formattedLaunchDate)
                                 }
                             }
                         }

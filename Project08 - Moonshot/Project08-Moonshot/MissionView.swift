@@ -49,6 +49,9 @@ struct MissionView: View {
                     MissionScrollView(mission: mission, astronauts: astronauts)
                 }
                 .padding(.bottom)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(mission.displayName)
+                .accessibilityHint(mission.description)
             }
         }
         .navigationTitle(mission.displayName)
