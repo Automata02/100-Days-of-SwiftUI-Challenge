@@ -48,13 +48,13 @@ struct ContentView: View {
                                 viewModel.addLocation()
                             } label: {
                                 Image(systemName: "plus")
+                                    .padding()
+                                    .background(.black.opacity(0.75))
+                                    .foregroundColor(.white)
+                                    .font(.title)
+                                    .clipShape(Circle())
+                                    .padding(.trailing)
                             }
-                            .padding()
-                            .background(.black.opacity(0.75))
-                            .foregroundColor(.white)
-                            .font(.title)
-                            .clipShape(Circle())
-                            .padding(.trailing)
                         }
                     }
                 }
@@ -74,6 +74,9 @@ struct ContentView: View {
                 .foregroundColor(.white)
                 .clipShape(Capsule())
             }
+        }
+        .alert(isPresented: $viewModel.hasFailedToAuth) {
+            Alert(title: Text(viewModel.errorTitle), message: Text(viewModel.errorMsg), dismissButton: .default(Text("OK")))
         }
     }
 }

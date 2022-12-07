@@ -19,6 +19,10 @@ extension ContentView {
         
         @Published var selectedPlace: Location?
         
+        @Published var hasFailedToAuth = false
+        @Published var errorTitle = ""
+        @Published var errorMsg = ""
+        
         let savePath = FileManager.documentsDirectory.appendingPathComponent("SavedPlaces")
         
         init() {
@@ -68,11 +72,15 @@ extension ContentView {
                             self.isUnlocked = true
                         }
                     } else {
-                        //error
+                       // Error message handled by system
                     }
                 }
             } else {
-                //no biometrics
+                Task { @MainActor in
+                    self.errorTitle = "Can't authenticate"
+                    self.errorMsg = "Your device has either disabled or non-existant biometric authentication."
+                    self.hasFailedToAuth = true
+                }
             }
         }
     }
