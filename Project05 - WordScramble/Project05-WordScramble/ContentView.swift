@@ -33,10 +33,11 @@ struct ContentView: View {
                                     Image(systemName: "\(word.count).circle.fill")
                                     Text(word)
                                 }
+                                .accessibilityElement()
+                                .accessibilityLabel(word)
+                                .accessibilityHint("\(word.count) letters")
                             }
                         }
-                        //                Section("Score: \(score)") {}
-                        //                    .fontWeight(.black)
                     }
                     .navigationTitle(rootWord.isEmpty ? "WordScramble" : rootWord.capitalized)
                     .toolbar {
