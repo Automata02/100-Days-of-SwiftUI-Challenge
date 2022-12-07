@@ -27,7 +27,7 @@ struct CheckoutView: View {
                 }
                 .frame(width: 333, height: 233)
                 .cornerRadius(10)
-                
+                .accessibilityHidden(true)
                 
                 Text("Your total is \(order.orderStruct.cost, format: .currency(code: "USD"))")
                     .font(.title)
