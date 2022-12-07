@@ -40,6 +40,9 @@ struct ContentView: View {
                                 Text(entry.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                                     .foregroundColor(colorPick(entry.amount))
                             }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("\(entry.name), \(toCurrency(_: entry.amount))")
+                            .accessibilityHint(indice == 0 ? "Type - Business expense" : " Type - personal expense")
                         }
                         .onDelete { dinky in
                             guard let firstIndex = dinky.first else { return }
@@ -72,6 +75,18 @@ struct ContentView: View {
             return .yellow
         default:
             return .red
+        }
+    }
+    
+    func toCurrency(_ amount: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .currency
+        
+        if let sumString = formatter.string(from: amount as NSNumber) {
+            return sumString
+        } else {
+            return "\(amount) USD"
         }
     }
 }
