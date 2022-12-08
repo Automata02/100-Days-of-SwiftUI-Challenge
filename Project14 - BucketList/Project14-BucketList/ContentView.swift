@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             #warning("Switch this to have FaceID.")
-            if viewModel.isUnlocked {
+            if !viewModel.isUnlocked {
                 ZStack {
                     Map(coordinateRegion: $viewModel.mapRegion, annotationItems: viewModel.locations) { location in
                         MapAnnotation(coordinate: location.coordinate) {
