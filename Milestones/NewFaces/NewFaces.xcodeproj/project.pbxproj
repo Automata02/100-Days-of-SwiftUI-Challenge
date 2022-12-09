@@ -13,6 +13,7 @@
 		6C8BADEE2941CF7500215ABE /* PersonData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BADEC2941CF7500215ABE /* PersonData.xcdatamodeld */; };
 		6C8BADF02941D02100215ABE /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BADEF2941D02100215ABE /* DataController.swift */; };
 		6C8BADF4294212EA00215ABE /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BADF3294212EA00215ABE /* DetailsView.swift */; };
+		6C8BADF629430EF000215ABE /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BADF529430EF000215ABE /* LocationFetcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		6C8BADED2941CF7500215ABE /* Person.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Person.xcdatamodel; sourceTree = "<group>"; };
 		6C8BADEF2941D02100215ABE /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		6C8BADF3294212EA00215ABE /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		6C8BADF529430EF000215ABE /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		6C8BADDB2941BDF800215ABE /* NewFaces */ = {
 			isa = PBXGroup;
 			children = (
+				6C8BADF529430EF000215ABE /* LocationFetcher.swift */,
 				6C8BADDC2941BDF800215ABE /* NewFacesApp.swift */,
 				6C8BADEF2941D02100215ABE /* DataController.swift */,
 				6C8BADDE2941BDF800215ABE /* ContentView.swift */,
@@ -136,6 +139,7 @@
 			files = (
 				6C8BADF02941D02100215ABE /* DataController.swift in Sources */,
 				6C8BADF4294212EA00215ABE /* DetailsView.swift in Sources */,
+				6C8BADF629430EF000215ABE /* LocationFetcher.swift in Sources */,
 				6C8BADDF2941BDF800215ABE /* ContentView.swift in Sources */,
 				6C8BADEE2941CF7500215ABE /* PersonData.xcdatamodeld in Sources */,
 				6C8BADDD2941BDF800215ABE /* NewFacesApp.swift in Sources */,
@@ -270,6 +274,7 @@
 				DEVELOPMENT_TEAM = SH7598WJ8A;
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To remind you where you've met this person we need to save the location data locally on your device.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +304,7 @@
 				DEVELOPMENT_TEAM = SH7598WJ8A;
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To remind you where you've met this person we need to save the location data locally on your device.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

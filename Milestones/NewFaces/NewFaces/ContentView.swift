@@ -4,15 +4,18 @@
 //
 //  Created by roberts.kursitis on 08/12/2022.
 //
-
+import CoreLocation
 import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name)]) var people: FetchedResults<Person>
+    let locationFetcher = LocationFetcher()
     
     @State private var showingAddPerson = false
+    @State private var willIncludeLocation = false
+    @State private var updateView = false
     
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedPhotoData: Data?
@@ -31,7 +34,7 @@ struct ContentView: View {
                     }
                     
                     ForEach(people) { person in
-                        NavigationLink(destination: DetailsView(image: person.picture!, name: person.name ?? "Unknown", company: person.company ?? "Unknown")) {
+                        NavigationLink(destination: DetailsView(image: person.picture!, name: person.name ?? "Unknown", company: person.company ?? "Unknown", location: CLLocation(latitude: person.latitude, longitude: person.longitude))) {
                             HStack {
                                 Image(uiImage: UIImage(data: person.picture!)!)
                                     .resizable()
@@ -76,7 +79,7 @@ struct ContentView: View {
                                         .resizable()
                                         .frame(width: 100, height: 100)
                                         .clipShape(Circle())
-                                        .padding(0)
+                                        .padding()
                                 }
                                 VStack {
                                     TextField("Enter name", text: $textFieldName)
@@ -84,6 +87,13 @@ struct ContentView: View {
                                     TextField("Enter Company", text: $textFieldCompany)
                                 }
                             }
+                            Toggle(isOn: $willIncludeLocation) {
+                                HStack(alignment: .center) {
+                                   Text("Include Location")
+                                   Image(systemName: "location.fill")
+                               }
+                            }
+                            if updateView {}
                         }
                     }
                     .navigationTitle(textFieldName == "" ? "New Person" : "\(textFieldName)")
@@ -100,18 +110,38 @@ struct ContentView: View {
                                 newPerson.name = textFieldName
                                 newPerson.company = textFieldCompany
                                 newPerson.picture = selectedPhotoData
+                                
+                                if willIncludeLocation {
+                                    if let location = self.locationFetcher.lastKnownLocation {
+                                        newPerson.latitude = location.latitude
+                                        newPerson.longitude = location.longitude
+                                    }
+                                } else {
+                                    print("no location to be included")
+                                }
+                                
                                 try? moc.save()
                                 
                                 textFieldName = ""
                                 textFieldCompany = ""
                                 
                                 showingAddPerson = false
+                                updateView = false
                             }
+                        }
+                    }
+                    .onAppear() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            updateView = true
+                            print("Band Aid Fix")
                         }
                     }
                 }
             }
             .navigationTitle("New Faces")
+            .onAppear() {
+                self.locationFetcher.start()
+            }
         }
     }
     
