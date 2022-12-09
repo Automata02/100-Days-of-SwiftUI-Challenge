@@ -93,7 +93,16 @@ struct ContentView: View {
                                    Image(systemName: "location.fill")
                                }
                             }
-                            if updateView {}
+                            if !updateView {
+                                Section("Updating Image") {
+                                        HStack{
+                                            Spacer()
+                                            ProgressView()
+                                            Spacer()
+                                        }
+                                        .padding(.vertical)
+                                }
+                            }
                         }
                     }
                     .navigationTitle(textFieldName == "" ? "New Person" : "\(textFieldName)")
