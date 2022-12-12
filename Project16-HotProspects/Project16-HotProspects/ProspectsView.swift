@@ -4,6 +4,7 @@
 //
 //  Created by roberts.kursitis on 12/12/2022.
 //
+
 import CodeScanner
 import SwiftUI
 import UserNotifications
@@ -12,9 +13,14 @@ struct ProspectsView: View {
     enum FilterType {
         case none, contacted, uncontacted
     }
+    enum SortingType {
+        case date, name, random
+    }
     
     @EnvironmentObject var prospects: Prospects
     @State private var isShowingScanner = false
+    @State private var isShowingSorting = false
+    @State private var sortingOrder = SortingType.date
     
     let filter: FilterType
     
@@ -23,8 +29,13 @@ struct ProspectsView: View {
             List {
                 ForEach(filteredProspects) { prospect in
                     VStack(alignment: .leading) {
-                        Text(prospect.name)
-                            .font(.headline)
+                        if filter == .none {
+                            Text(prospect.isContacted ? prospect.name : "\(prospect.name) 🤙")
+                                .font(.headline)
+                        } else {
+                            Text(prospect.name)
+                                .font(.headline)
+                        }
                         Text(prospect.emailAddress)
                             .foregroundColor(.secondary)
                     }
@@ -56,14 +67,37 @@ struct ProspectsView: View {
             }
             .navigationTitle(title)
             .toolbar {
-                Button {
-                    isShowingScanner = true
-                } label: {
-                    Label("Scan", systemImage: "qrcode.viewfinder")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        isShowingSorting = true
+                    } label: {
+                        Label("Sort", systemImage: "list.bullet")
+                    }
+                }
+                
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        isShowingScanner = true
+                    } label: {
+                        Label("Scan", systemImage: "qrcode.viewfinder")
+                    }
                 }
             }
             .sheet(isPresented: $isShowingScanner) {
                 CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson\npaul@hws.com", completion: handleScan)
+            }
+            .confirmationDialog("Select prefered sorting.", isPresented: $isShowingSorting) {
+                Button("By Name") {
+                    sortingOrder = .name
+                }
+                
+                Button("Most Recent") {
+                    sortingOrder = .date
+                }
+                //Returns a shuffled array, easeir to test if the other methods work
+                Button("Surprise Me!") {
+                    sortingOrder = .random
+                }
             }
         }
     }
@@ -80,13 +114,24 @@ struct ProspectsView: View {
     }
     
     var filteredProspects: [Prospect] {
+        let prospectArray: [Prospect]
+        
         switch filter {
         case .none:
-            return prospects.people
+            prospectArray = prospects.people
         case .contacted:
-            return prospects.people.filter { $0.isContacted }
+            prospectArray = prospects.people.filter { $0.isContacted }
         case .uncontacted:
-            return prospects.people.filter { !$0.isContacted }
+            prospectArray = prospects.people.filter { !$0.isContacted }
+        }
+        
+        switch sortingOrder {
+        case .name:
+            return prospectArray.sorted { $0.name < $1.name }
+        case .date:
+            return prospectArray.sorted { $0.added > $1.added }
+        case .random:
+            return prospectArray.shuffled()
         }
     }
     
@@ -100,6 +145,7 @@ struct ProspectsView: View {
             let person = Prospect()
             person.name = details[0]
             person.emailAddress = details[1]
+            person.added = Date.now
             prospects.add(person)
         case .failure(let error):
             print("Scanning failed \(error.localizedDescription)")
