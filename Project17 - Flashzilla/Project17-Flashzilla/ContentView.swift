@@ -17,6 +17,7 @@ extension View {
 struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEbabled
+    let savePath = FileManager.documentsDirectory.appendingPathComponent("SavedData")
     @State private var cards = [Card]()
     
     @State private var timeRemaining = 100
@@ -41,15 +42,15 @@ struct ContentView: View {
                     .background(.black.opacity(0.75))
                     .clipShape(Capsule())
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
+                    ForEach(Array(cards.enumerated()), id: \.element) { item in
+                        CardView(card: item.element) { vibeCheck in
                             withAnimation {
-                                removeCard(at: index)
+                                removeCard(at: item.offset, toBack: vibeCheck)
                             }
                         }
-                        .stacked(at: index, in: cards.count)
-                        .allowsHitTesting(index == cards.count - 1)
-                        .accessibilityHidden(index < cards.count - 1)
+                        .stacked(at: item.offset, in: cards.count)
+                        .allowsHitTesting(item.offset == cards.count - 1)
+                        .accessibilityHidden(item.offset < cards.count - 1)
                     }
                 }
                 .allowsHitTesting(timeRemaining > 0)
@@ -83,45 +84,45 @@ struct ContentView: View {
             .foregroundColor(.white)
             .font(.largeTitle)
             .padding()
-            
-            if differentiateWithoutColor || voiceOverEbabled {
-                VStack {
-                    Spacer()
-                    
-                    HStack {
-                        Button {
-                            withAnimation {
-                                removeCard(at: cards.count - 1)
-                            }
-                        } label: {
-                            Image(systemName: "xmark.circle")
-                                .padding()
-                                .background(.black.opacity(0.75))
-                                .clipShape(Circle())
-                        }
-                        .accessibilityLabel("Wrong")
-                        .accessibilityHint("Mark your answer as being incorrect")
-                        
-                        Spacer()
-                        
-                        Button {
-                            withAnimation {
-                                removeCard(at: cards.count - 1)
-                            }
-                        } label: {
-                            Image(systemName: "checkmark.circle")
-                                .padding()
-                                .background(.black.opacity(0.75))
-                                .clipShape(Circle())
-                        }
-                        .accessibilityLabel("Correct")
-                        .accessibilityHint("Mark your answer as being correct")
-                    }
-                    .foregroundColor(.white)
-                    .font(.largeTitle)
-                    .padding()
-                }
-            }
+            #warning("commented out due to changes done to the removeCard function")
+//            if differentiateWithoutColor || voiceOverEbabled {
+//                VStack {
+//                    Spacer()
+//
+//                    HStack {
+//                        Button {
+//                            withAnimation {
+//                                removeCard(at: cards.count - 1)
+//                            }
+//                        } label: {
+//                            Image(systemName: "xmark.circle")
+//                                .padding()
+//                                .background(.black.opacity(0.75))
+//                                .clipShape(Circle())
+//                        }
+//                        .accessibilityLabel("Wrong")
+//                        .accessibilityHint("Mark your answer as being incorrect")
+//
+//                        Spacer()
+//
+//                        Button {
+//                            withAnimation {
+//                                removeCard(at: cards.count - 1)
+//                            }
+//                        } label: {
+//                            Image(systemName: "checkmark.circle")
+//                                .padding()
+//                                .background(.black.opacity(0.75))
+//                                .clipShape(Circle())
+//                        }
+//                        .accessibilityLabel("Correct")
+//                        .accessibilityHint("Mark your answer as being correct")
+//                    }
+//                    .foregroundColor(.white)
+//                    .font(.largeTitle)
+//                    .padding()
+//                }
+//            }
         }
         .onReceive(timer) { time in
             guard isActive else { return }
@@ -145,17 +146,23 @@ struct ContentView: View {
     }
     
     func loadData() {
-        if let data = UserDefaults.standard.data(forKey: "Cards") {
+        if let data = try? Data(contentsOf: savePath) {
             if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
                 cards = decoded
+                return
             }
         }
+        cards = []
     }
     
-    func removeCard(at index: Int) {
+    func removeCard(at index: Int, toBack: Bool) {
         guard index >= 0 else { return }
         
-        cards.remove(at: index)
+        if toBack {
+            cards.move(fromOffsets: IndexSet(integer: index), toOffset: 0)
+        } else {
+            cards.remove(at: index)
+        }
         
         if cards.isEmpty {
             isActive = false

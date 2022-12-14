@@ -14,6 +14,7 @@
 		6C8BAE3C2948B4C900215ABE /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BAE3B2948B4C900215ABE /* Card.swift */; };
 		6C8BAE3E2948B58500215ABE /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BAE3D2948B58500215ABE /* CardView.swift */; };
 		6C8BAE402949E6E200215ABE /* EditCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BAE3F2949E6E200215ABE /* EditCards.swift */; };
+		6C8BAE42294A0C5500215ABE /* FileManager-DocumentsDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8BAE41294A0C5500215ABE /* FileManager-DocumentsDirectory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		6C8BAE3B2948B4C900215ABE /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		6C8BAE3D2948B58500215ABE /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		6C8BAE3F2949E6E200215ABE /* EditCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCards.swift; sourceTree = "<group>"; };
+		6C8BAE41294A0C5500215ABE /* FileManager-DocumentsDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager-DocumentsDirectory.swift"; path = "../../Project16-HotProspects/Project16-HotProspects/FileManager-DocumentsDirectory.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 		6C8BAE2C2948574F00215ABE /* Project17-Flashzilla */ = {
 			isa = PBXGroup;
 			children = (
+				6C8BAE41294A0C5500215ABE /* FileManager-DocumentsDirectory.swift */,
 				6C8BAE2D2948574F00215ABE /* Project17_FlashzillaApp.swift */,
 				6C8BAE2F2948574F00215ABE /* ContentView.swift */,
 				6C8BAE3D2948B58500215ABE /* CardView.swift */,
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8BAE42294A0C5500215ABE /* FileManager-DocumentsDirectory.swift in Sources */,
 				6C8BAE302948574F00215ABE /* ContentView.swift in Sources */,
 				6C8BAE3C2948B4C900215ABE /* Card.swift in Sources */,
 				6C8BAE3E2948B58500215ABE /* CardView.swift in Sources */,
