@@ -7,17 +7,9 @@
 
 import SwiftUI
 
-extension View {
-    func stacked(at position: Int, in total: Int) -> some View {
-        let offset = Double(total - position)
-        return self.offset(y: offset * 10)
-    }
-}
-
 struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEbabled
-    let savePath = FileManager.documentsDirectory.appendingPathComponent("SavedData")
     @State private var cards = [Card]()
     
     @State private var timeRemaining = 100
@@ -145,16 +137,6 @@ struct ContentView: View {
         .onAppear(perform: resetCards)
     }
     
-    func loadData() {
-        if let data = try? Data(contentsOf: savePath) {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-                return
-            }
-        }
-        cards = []
-    }
-    
     func removeCard(at index: Int, toBack: Bool) {
         guard index >= 0 else { return }
         
@@ -172,7 +154,7 @@ struct ContentView: View {
     func resetCards() {
         timeRemaining = 100
         isActive = true
-        loadData()
+        cards = loadDataFromDocs()
     }
 }
 

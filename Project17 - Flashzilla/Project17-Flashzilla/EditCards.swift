@@ -12,7 +12,6 @@ struct EditCards: View {
     @State private var cards = [Card]()
     @State private var newPrompt = ""
     @State private var newAnswer = ""
-    let savePath = FileManager.documentsDirectory.appendingPathComponent("SavedData")
     
     var body: some View {
         NavigationView {
@@ -41,7 +40,9 @@ struct EditCards: View {
                 Button("Done", action: done)
             }
             .listStyle(.grouped)
-            .onAppear(perform: loadData)
+            .onAppear {
+                cards = loadDataFromDocs()
+            }
         }
     }
     
@@ -49,30 +50,14 @@ struct EditCards: View {
         dismiss()
     }
     
-    func loadData() {
-        if let data = try? Data(contentsOf: savePath) {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-                return
-            }
-        }
-        cards = []
-    }
-    
-    func saveData() {
-        if let encoded = try? JSONEncoder().encode(cards) {
-            try? encoded.write(to: savePath, options: [.atomic, .completeFileProtection])
-        }
-    }
-    
     func addCard() {
         let trimmedPrompt = newPrompt.trimmingCharacters(in: .whitespaces)
         let trimmedAnswer = newAnswer.trimmingCharacters(in: .whitespaces)
         guard trimmedPrompt.isEmpty == false && trimmedAnswer.isEmpty == false else { return }
         
-        let card = Card(promt: trimmedAnswer, answer: trimmedAnswer)
+        let card = Card(promt: trimmedPrompt, answer: trimmedAnswer)
         cards.insert(card, at: 0)
-        saveData()
+        saveDataInDocs(cards)
         
         newPrompt = ""
         newAnswer = ""
@@ -80,7 +65,7 @@ struct EditCards: View {
     
     func removeCards(at offsets: IndexSet) {
         cards.remove(atOffsets: offsets)
-        saveData()
+        saveDataInDocs(cards)
     }
 }
 
