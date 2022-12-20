@@ -14,6 +14,7 @@
 		6CEE512E295048D4004208D3 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE512D295048D4004208D3 /* HistoryView.swift */; };
 		6CEE513029504E9C004208D3 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE512F29504E9C004208D3 /* FileManager.swift */; };
 		6CEE513229504F11004208D3 /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE513129504F11004208D3 /* Roll.swift */; };
+		6CEE51342951B710004208D3 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE51332951B710004208D3 /* Polygon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		6CEE512D295048D4004208D3 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		6CEE512F29504E9C004208D3 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		6CEE513129504F11004208D3 /* Roll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
+		6CEE51332951B710004208D3 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				6CEE513129504F11004208D3 /* Roll.swift */,
+				6CEE51332951B710004208D3 /* Polygon.swift */,
 				6CEE511F29503EFA004208D3 /* RollDiceApp.swift */,
 				6CEE512129503EFA004208D3 /* ContentView.swift */,
 				6CEE512F29504E9C004208D3 /* FileManager.swift */,
@@ -148,6 +151,7 @@
 			files = (
 				6CEE512229503EFA004208D3 /* ContentView.swift in Sources */,
 				6CEE512E295048D4004208D3 /* HistoryView.swift in Sources */,
+				6CEE51342951B710004208D3 /* Polygon.swift in Sources */,
 				6CEE512029503EFA004208D3 /* RollDiceApp.swift in Sources */,
 				6CEE513029504E9C004208D3 /* FileManager.swift in Sources */,
 				6CEE513229504F11004208D3 /* Roll.swift in Sources */,

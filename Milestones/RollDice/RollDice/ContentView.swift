@@ -29,24 +29,46 @@ struct ContentView: View {
     
     @State private var isShowingHistory = false
     
+    var sides: Int {
+        switch currentDie {
+        case .four:
+            return 3
+        case .six:
+            return 4
+        case .eight:
+            return 5
+        case .twelve:
+            return 10
+        case .twenty:
+            return 6
+        case .hundred:
+            return 20
+        }
+    }
+    
     
     var body: some View {
         NavigationView {
             VStack {
-                //MARK: Adding timer logic to the text view itself
-                Text(display).onReceive(timer) { _ in
-                    if time > 0 && isActive{
-                        display = randomCharacters.randomElement() ?? ""
-                        time -= 1
-                    }else{
-                        isActive = false
-                        display = String(result)
+                ZStack {
+                    Polygon(sides: sides, angle: 90)
+                    .foregroundColor(Color(uiColor: .secondarySystemBackground))
+                    .padding()
+                    
+                    //MARK: Adding timer logic to the text view itself
+                    Text(display).onReceive(timer) { _ in
+                        if time > 0 && isActive{
+                            display = randomCharacters.randomElement() ?? ""
+                            time -= 1
+                        }else{
+                            isActive = false
+                            display = String(result)
+                        }
                     }
+                    .font(.system(size: UIFont.textSize(.largeTitle) * 2, weight: .semibold))
+                    .frame(width: 300, height: 300)
                 }
-                .font(.system(size: UIFont.textSize(.largeTitle) * 2, weight: .semibold))
-                .frame(width: 300, height: 300)
-                .background(Color(uiColor: .secondarySystemBackground))
-                .cornerRadius(25)
+                .rotation3DEffect(.degrees(Double(time * 10)), axis: (x: 1, y: 1, z: 0))
                 
                 Picker("Select your die", selection: $currentDie) {
                     ForEach(Constants.AllDice.allCases, id: \.self) { die in
@@ -55,6 +77,9 @@ struct ContentView: View {
                 }
                 .pickerStyle(.menu)
                 .padding(.vertical, 25)
+                .onTapGesture {
+                    display = "1"
+                }
                 
                 Button("Roll!") {
                     //MARK: Haptics
