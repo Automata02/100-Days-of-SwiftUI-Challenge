@@ -56,8 +56,8 @@ struct HistoryView: View {
                 }
             }
             .actionSheet(isPresented: $showingDelete) {
-                ActionSheet(title: Text("Change background"),
-                            message: Text("Select a new color"),
+                ActionSheet(title: Text("Delete entries"),
+                            message: Text("Are you sure you want to delete everything?"),
                             buttons: [
                                     .destructive(Text("Delete")) {
                                         deleteRolls()

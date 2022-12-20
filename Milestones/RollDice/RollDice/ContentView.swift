@@ -22,7 +22,7 @@ struct ContentView: View {
     @State private var result: Int = 0
     
     @State private var display: String = "1️⃣"
-    var randomCharacters = ["???", "🤷", "✨", "💯", "1", "2", "3", "42", "💀", "❤️"]
+    var randomCharacters = ["???", "🤷", "✨", "💯", "1", "2", "3", "42", "💀", "❤️", "B", "a", "nil", "$0", "$1"]
     let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     @State private var isActive: Bool = false
     @State private var time: Int = 0
