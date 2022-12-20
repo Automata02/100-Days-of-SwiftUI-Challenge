@@ -10,6 +10,7 @@ import SwiftUI
 struct HistoryView: View {
     @Environment(\.dismiss.self) var dismiss
     @State var rolls: [Roll]
+    @State private var showingDelete = false
     
     var savedDice: [String] {
         var arr = [String]()
@@ -37,12 +38,33 @@ struct HistoryView: View {
             .navigationTitle("Roll History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Button("OK", action: ok)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("OK", action: ok)
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        showingDelete = true
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
             }
             .onAppear {
                 if rolls.isEmpty {
                     rolls = loadRolls()
                 }
+            }
+            .actionSheet(isPresented: $showingDelete) {
+                ActionSheet(title: Text("Change background"),
+                            message: Text("Select a new color"),
+                            buttons: [
+                                    .destructive(Text("Delete")) {
+                                        deleteRolls()
+                                        rolls = loadRolls()
+                                    },
+                                    .cancel()
+                                ])
             }
         }
     }

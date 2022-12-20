@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+//MARK: Extension to make system fonts larger
+public extension UIFont {
+    static func textSize(_ style: UIFont.TextStyle) -> CGFloat {
+        UIFont.preferredFont(forTextStyle: style).pointSize
+    }
+}
+
 struct ContentView: View {
     
     @State private var rolls = [Roll]()
@@ -17,6 +24,8 @@ struct ContentView: View {
     @State private var display: String = "1️⃣"
     var randomCharacters = ["???", "🤷", "✨", "💯", "1", "2", "3", "42", "💀", "❤️"]
     let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    @State private var isActive: Bool = false
+    @State private var time: Int = 0
     
     @State private var isShowingHistory = false
     
@@ -24,14 +33,20 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text(display)
-                    .font(.largeTitle)
-                    .frame(width: 300, height: 300)
-                    .background(Color(uiColor: .secondarySystemBackground))
-                    .cornerRadius(25)
-                
-                Text(String(result))
-                    .font(.largeTitle)
+                //MARK: Adding timer logic to the text view itself
+                Text(display).onReceive(timer) { _ in
+                    if time > 0 && isActive{
+                        display = randomCharacters.randomElement() ?? ""
+                        time -= 1
+                    }else{
+                        isActive = false
+                        display = String(result)
+                    }
+                }
+                .font(.system(size: UIFont.textSize(.largeTitle) * 2, weight: .semibold))
+                .frame(width: 300, height: 300)
+                .background(Color(uiColor: .secondarySystemBackground))
+                .cornerRadius(25)
                 
                 Picker("Select your die", selection: $currentDie) {
                     ForEach(Constants.AllDice.allCases, id: \.self) { die in
@@ -39,6 +54,7 @@ struct ContentView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .padding(.vertical, 25)
                 
                 Button("Roll!") {
                     //MARK: Haptics
@@ -50,6 +66,10 @@ struct ContentView: View {
                     let roll = Roll(die: currentDie.rawValue, value: result)
                     rolls.append(roll)
                     saveRolls(rolls)
+                    
+                    //MARK: Triggering timer
+                    time += 15
+                    isActive = true
                 }
                 .frame(width: 150, height: 100)
                 .background(.green)

@@ -59,4 +59,20 @@ extension View {
             try? encoded.write(to: Constants.savePath, options: [.atomic, .completeFileProtection])
         }
     }
+    
+    func deleteRolls() {
+        let fileManager = FileManager.default
+        
+        do {
+            try fileManager.removeItem(at: Constants.savePath)
+        } catch {
+            print(error)
+        }
+        //        if fileManager.fileExists(atPath: Constants.savePath) {
+        //            try fileManager.removeItem(atPath: Constants.savePath)
+        //        }
+        //        if let data = try? Data(contentsOf: Constants.savePath) {
+        //
+        //        }
+    }
 }
